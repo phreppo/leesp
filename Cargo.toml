@@ -1,0 +1,6 @@
+[package]
+name = "leesp"
+version = "0.1.0"
+authors = ["phreppo <parolini.francesco.1@gmail.com>"]
+
+[dependencies]
