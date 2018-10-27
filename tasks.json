@@ -36,7 +36,10 @@
         {
             "taskName": "run",
             "args": [ "run", "-v" ],
-            "showOutput": "always",
+            // "showOutput": "always",
+            "presentation": {
+                "reveal": "never"
+            },
             "isBuildCommand": true,
             "problemMatcher": [
                 {

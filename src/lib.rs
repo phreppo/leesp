@@ -3,7 +3,6 @@ pub mod lispcore;
 
 #[cfg(test)]
 mod tests {
-    use super::*;
     use lispcore::*;
 
     #[test]
