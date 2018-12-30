@@ -1,6 +1,5 @@
 use std::fmt;
 use std::fmt::Display;
-use std::rc::Rc;
 
 #[derive(Debug, PartialEq)]
 pub enum Cell {
@@ -8,8 +7,8 @@ pub enum Cell {
     Num(i32),
     Str(String),
     Symbol(String),
-    // TODO: forse qui mi basta anche un Box se il linguaggio è funzionale puro
-    Cons(Rc<Cell>, Rc<Cell>),
+    // qui prima avevo un RC
+    Cons(Box<Cell>, Box<Cell>),
 }
 
 pub fn new_nil() -> Cell {
@@ -29,7 +28,7 @@ pub fn new_symbol(sym: String) -> Cell {
 }
 
 pub fn new_cons(car: Cell, cdr: Cell) -> Cell {
-    Cell::Cons(Rc::new(car), Rc::new(cdr))
+    Cell::Cons(Box::new(car), Box::new(cdr))
 }
 
 impl Display for Cell {
