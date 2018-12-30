@@ -1,3 +1,4 @@
+use std::rc::Rc;
 extern crate leesp;
 
 use leesp::lispcore::*;
@@ -27,6 +28,15 @@ use leesp::lispcore::*;
 fn main() {
     let number1 = new_num(1);
     let symbol1 = new_symbol("n".to_string());
-    let assoc1 = new_cons(&symbol1, &number1);
+    let n1_rc = Rc::new(number1);
+    let s1_rc = Rc::new(symbol1);
+    let assoc1 = new_cons(n1_rc, s1_rc);
     println!("{}", assoc1);
+    {
+        let reftonum = match assoc1 {
+            Cell::Cons(car, cdr) => Rc::clone(&car),
+            _ => panic!("fock!"),
+        };
+        println!("{}", reftonum);
+    }
 }

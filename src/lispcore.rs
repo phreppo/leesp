@@ -1,5 +1,6 @@
 use std::fmt;
 use std::fmt::Display;
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq, Clone)]
 pub enum Cell {
@@ -8,7 +9,7 @@ pub enum Cell {
     Str(String),
     Symbol(String),
     // qui prima avevo un RC
-    Cons(Box<Cell>, Box<Cell>),
+    Cons(Rc<Cell>, Rc<Cell>),
 }
 
 pub fn new_nil() -> Cell {
@@ -27,8 +28,8 @@ pub fn new_symbol(sym: String) -> Cell {
     Cell::Str(sym)
 }
 
-pub fn new_cons(car: &Cell, cdr: &Cell) -> Cell {
-    Cell::Cons(Box::new(car.clone()), Box::new(cdr.clone()))
+pub fn new_cons(car: Rc<Cell>, cdr: Rc<Cell>) -> Cell {
+    Cell::Cons(car, cdr)
 }
 
 impl Display for Cell {
