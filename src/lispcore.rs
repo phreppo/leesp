@@ -8,6 +8,7 @@ pub enum Cell {
     Num(i32),
     Str(String),
     Symbol(String),
+    // TODO: forse qui mi basta anche un Box se il linguaggio è funzionale puro
     Cons(Rc<Cell>, Rc<Cell>),
 }
 
