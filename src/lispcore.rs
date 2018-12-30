@@ -2,6 +2,14 @@ use std::fmt;
 use std::fmt::Display;
 use std::rc::Rc;
 
+const BUILTIN_LAMBDAS: &'static [&'static str] = &[
+    "CAR", 
+    "CDR", 
+    "CONS", 
+    "LAMBDA", 
+    "QUOTE"
+];
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Cell {
     Nil,
