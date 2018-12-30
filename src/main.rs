@@ -27,6 +27,7 @@ use leesp::lispcore::*;
 fn main() {
     let number1 = new_num(1);
     let symbol1 = new_symbol("n".to_string());
-    let assoc1 = new_cons(symbol1, number1);
+    let assoc1 = new_cons(&symbol1, &number1);
     println!("{}", assoc1);
+    let referenza = &number1;
 }

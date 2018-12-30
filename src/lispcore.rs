@@ -1,7 +1,7 @@
 use std::fmt;
 use std::fmt::Display;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Cell {
     Nil,
     Num(i32),
@@ -27,8 +27,8 @@ pub fn new_symbol(sym: String) -> Cell {
     Cell::Str(sym)
 }
 
-pub fn new_cons(car: Cell, cdr: Cell) -> Cell {
-    Cell::Cons(Box::new(car), Box::new(cdr))
+pub fn new_cons(car: &Cell, cdr: &Cell) -> Cell {
+    Cell::Cons(Box::new(car.clone()), Box::new(cdr.clone()))
 }
 
 impl Display for Cell {
