@@ -15,7 +15,7 @@ pub enum Cell {
     Nil,
     Num(i32),
     Str(String),
-    Symbol(String),
+    Symbol(String), 
     // qui prima avevo un RC
     Cons(Rc<Cell>, Rc<Cell>),
 }
