@@ -31,7 +31,7 @@ fn main() {
     let symbol1 = new_symbol("n".to_string());
     let n1_rc = Rc::new(number1);
     let s1_rc = Rc::new(symbol1);
-    let assoc1 = new_cons(n1_rc, s1_rc);
+    let assoc1 = new_cons(s1_rc, n1_rc);
 
     let number1_prime = new_num(1);
     let number2_prime = new_num(2);
@@ -76,13 +76,23 @@ fn main() {
         None => panic!("holy shit"),
     };
 
-    let assoc3 = new_cons(Rc::new(new_nil()), Rc::new(assoc1));
-    match caddr(&assoc3) {
-        Some(expr) => println!("{}",  expr),
-        None => println!("salame!"),
-    }
-    println!("{}",  assoc3);
+    // let assoc3 = new_cons(Rc::new(new_nil()), Rc::new(assoc1));
+    // match caddr(&assoc3) {
+    //     Some(expr) => println!("{}",  expr),
+    //     None => println!("salame!"),
+    // }
+    // println!("{}",  assoc3);
 
     let car_cell = new_symbol("QUOTE".to_string());
     println!("> {}",  is_symbol(&car_cell, Symbol::CDR));
+
+    let symbol2 = new_symbol("s2".to_string());
+    let string2 = new_str("salame".to_string());
+    let assoc2 = new_cons(Rc::new(symbol2), Rc::new(string2));
+    let env1 = new_cons(Rc::new(assoc1), Rc::new(new_cons(Rc::new(assoc2),Rc::new(new_nil()))));
+    println!("{}",  env1);
+    match assoc(&new_symbol("s2".to_string()),&env1) {
+        Some(expr) => println!("{}",  expr),
+        None => println!("We have no found any assoc" ),
+    }
 }
