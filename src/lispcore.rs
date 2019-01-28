@@ -122,6 +122,13 @@ pub fn eq(cell1: &Cell, cell2: &Cell) -> bool {
     cell1 == cell2
 }
 
+pub fn null(cell: &Cell) -> bool {
+    match cell {
+        Nil => true,
+        _ => false,
+    }
+}
+
 // first checks if the cell is a symbol, and then if the symbol is the one on the right
 pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
     match cell {
@@ -141,7 +148,7 @@ pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
 pub fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     match caar(a) {
         Some(reference) => 
-            if (eq(x, &reference)){
+            if eq(x, &reference){
                 cdar(a)
             } else {
                 match cdr(a) {
@@ -153,4 +160,18 @@ pub fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     }
 }
 
-
+// TODO QUESTA E' DA FARE
+pub fn pairlis(x : &Cell,y : &Cell,a : &Cell) -> Option<Rc<Cell>>{
+    if null(x) {
+        return Some(Rc::new(a));
+    } else {
+        match car(x) {
+            Some(expr) => 
+                match car(y) {
+                    Some(expr1) => None,
+                    None => None,
+                },
+            None => None,
+        }
+    }
+}
