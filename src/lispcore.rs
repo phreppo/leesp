@@ -47,6 +47,24 @@ pub fn atom(cell: &Cell) -> bool{
     }
 }
 
+pub fn car(cell: &Cell) -> Option<Rc<Cell>> {
+    match cell {
+        Cell::Cons(car,_) => Some(Rc::clone(&car)),
+        _ => Option::None,
+    }
+}
+
+pub fn cdr(cell: &Cell) -> Option<Rc<Cell>> {
+    match cell {
+        Cell::Cons(_,cdr) => Some(Rc::clone(&cdr)),
+        _ => Option::None,
+    }
+}
+
+pub fn eq(cell1: &Cell, cell2: &Cell) -> bool{
+    cell1 == cell2
+}
+
 impl Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
