@@ -40,6 +40,13 @@ pub fn new_cons(car: Rc<Cell>, cdr: Rc<Cell>) -> Cell {
     Cell::Cons(car, cdr)
 }
 
+pub fn atom(cell: &Cell) -> bool{
+    match cell {
+        Cell::Cons(_,_) => false,
+        _ => true,
+    }
+}
+
 impl Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
