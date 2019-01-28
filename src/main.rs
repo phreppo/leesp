@@ -70,4 +70,16 @@ fn main() {
     println!("{}",  assoc1);
     println!("{}",  eq(&assoc1,&assoc1_prime)); // equals!
     println!("{}",  eq(&reference_to_n1,&assoc1_prime)); // false
+
+    match maybe_car(Some(&assoc1)) {
+        Some(expr) => expr,
+        None => panic!("holy shit"),
+    };
+
+    let assoc3 = new_cons(Rc::new(new_nil()), Rc::new(assoc1));
+    match caddr(&assoc3) {
+        Some(expr) => println!("{}",  expr),
+        None => println!("salame!"),
+    }
+    println!("{}",  assoc3);
 }

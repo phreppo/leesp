@@ -61,6 +61,49 @@ pub fn cdr(cell: &Cell) -> Option<Rc<Cell>> {
     }
 }
 
+pub fn maybe_car(maybe_cell: Option<&Cell>) -> Option<Rc<Cell>>{
+    match maybe_cell {
+        Some(cell) => car(cell),
+        None => None,
+    }
+}
+
+pub fn maybe_cdr(maybe_cell: Option<&Cell>) -> Option<Rc<Cell>>{
+    match maybe_cell {
+        Some(cell) => cdr(cell),
+        None => None,
+    }
+}
+
+pub fn caar(cell: &Cell) -> Option<Rc<Cell>> {
+    match maybe_car(Some(cell)) {
+        Some(rc_to_cons_cell) => car(&rc_to_cons_cell),
+        _ => Option::None,
+    }
+}
+
+pub fn cdar(cell: &Cell) -> Option<Rc<Cell>> {
+    match maybe_car(Some(cell)) {
+        Some(rc_to_cons_cell) => cdr(&rc_to_cons_cell),
+        _ => Option::None,
+    }
+}
+
+pub fn cadr(cell: &Cell) -> Option<Rc<Cell>> {
+    match maybe_cdr(Some(cell)) {
+        Some(rc_to_cons_cell) => car(&rc_to_cons_cell),
+        _ => Option::None,
+    }
+}
+
+// TODO: test this!
+pub fn caddr(cell: &Cell) -> Option<Rc<Cell>> {
+    match maybe_cdr(Some(cell)) {
+        Some(rc_to_cons_cell) => cadr(&rc_to_cons_cell),
+        _ => Option::None,
+    }
+}
+
 pub fn eq(cell1: &Cell, cell2: &Cell) -> bool{
     cell1 == cell2
 }
