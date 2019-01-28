@@ -82,4 +82,7 @@ fn main() {
         None => println!("salame!"),
     }
     println!("{}",  assoc3);
+
+    let car_cell = new_symbol("QUOTE".to_string());
+    println!("> {}",  is_symbol(&car_cell, Symbol::CDR));
 }

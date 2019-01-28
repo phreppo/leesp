@@ -10,6 +10,14 @@ const BUILTIN_LAMBDAS: &'static [&'static str] = &[
     "QUOTE"
 ];
 
+pub enum Symbol{
+    CAR,
+    CDR,
+    CONS,
+    LAMBDA,
+    QUOTE
+}
+
 #[derive(Debug, PartialEq, Clone)]
 pub enum Cell {
     Nil,
@@ -29,11 +37,11 @@ pub fn new_num(num: i32) -> Cell {
 }
 
 pub fn new_str(str: String) -> Cell {
-    Cell::Str(str)
+    Cell::Str(str.to_uppercase())
 }
 
 pub fn new_symbol(sym: String) -> Cell {
-    Cell::Str(sym)
+    Cell::Symbol(sym.to_uppercase())
 }
 
 pub fn new_cons(car: Rc<Cell>, cdr: Rc<Cell>) -> Cell {
@@ -106,6 +114,21 @@ pub fn caddr(cell: &Cell) -> Option<Rc<Cell>> {
 
 pub fn eq(cell1: &Cell, cell2: &Cell) -> bool{
     cell1 == cell2
+}
+
+// first checks if the cell is a symbol, and then if the symbol is the one on the right
+pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool{
+    match cell {
+        Cell::Symbol(symbol_string) => 
+            match symbol {
+                Symbol::CAR => BUILTIN_LAMBDAS[0].eq_ignore_ascii_case(&symbol_string),
+                Symbol::CDR =>  BUILTIN_LAMBDAS[1].eq_ignore_ascii_case(&symbol_string),
+                Symbol::CONS =>  BUILTIN_LAMBDAS[2].eq_ignore_ascii_case(&symbol_string),
+                Symbol::LAMBDA =>  BUILTIN_LAMBDAS[3].eq_ignore_ascii_case(&symbol_string),
+                Symbol::QUOTE => BUILTIN_LAMBDAS[4].eq_ignore_ascii_case(&symbol_string),
+            },
+        _ => false,
+    }
 }
 
 impl Display for Cell {
