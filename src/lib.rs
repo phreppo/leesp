@@ -30,9 +30,22 @@ mod tests {
         return new_cons(s1_rc, n1_rc);
     }
 
+    fn env1() -> Cell {
+        return new_cons(Rc::new(assoc1()), Rc::new(new_cons(Rc::new(assoc2()), Rc::new(new_nil()))));
+    }
+
     #[test]
     fn it_works() {
         assert_eq!(2 + 2, 4);
+    }
+
+    #[test]
+    fn eval_assoc() {
+        let val = eval(&new_symbol("s1".to_string()), &env1());
+        match val {
+            Some(expr) => assert_eq!(Cell::Num(1), *expr),
+            None => panic!("shit"),
+        }
     }
 
     // #[test]

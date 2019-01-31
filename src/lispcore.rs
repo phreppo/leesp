@@ -161,7 +161,6 @@ pub fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     }
 }
 
-// TODO questa e da mettere con i punti di domanda
 pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
     if null(x) {
         return Some(Rc::clone(&a));
@@ -176,4 +175,12 @@ pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
             Rc::clone(&rest_of_the_env),
         )));
     }
+}
+
+pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>>{
+    if atom(e){
+        let val = assoc(e, a)?;
+        return Some(val);
+    }
+    return None;
 }

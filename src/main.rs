@@ -104,7 +104,12 @@ fn main() {
         &second_list, 
         Rc::new(new_cons(Rc::new(assoc1),Rc::new(new_nil()))));
     match pairlis1 {
-        Some(expr) => println!("{}",  expr),
+    
+        Some(expr) => 
+        match eval(&new_symbol("n".to_string()), &expr) {
+            Some(result) => println!("{}",  result),
+            None => println!("Shitet"),
+        },
         None => println!("shit"),
     }
 }
