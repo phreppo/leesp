@@ -124,7 +124,7 @@ pub fn eq(cell1: &Cell, cell2: &Cell) -> bool {
 
 pub fn null(cell: &Cell) -> bool {
     match cell {
-        Nil => true,
+        Cell::Nil => true,
         _ => false,
     }
 }
@@ -147,31 +147,33 @@ pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
 
 pub fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     match caar(a) {
-        Some(reference) => 
-            if eq(x, &reference){
+        Some(reference) => {
+            if eq(x, &reference) {
                 cdar(a)
             } else {
                 match cdr(a) {
-                    Some(expr) => assoc(x,&expr),
+                    Some(expr) => assoc(x, &expr),
                     None => None,
                 }
-            } ,
+            }
+        }
         None => None,
     }
 }
 
-// TODO QUESTA E' DA FARE
-pub fn pairlis(x : &Cell,y : &Cell,a : &Cell) -> Option<Rc<Cell>>{
+// TODO questa e da mettere con i punti di domanda
+pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
     if null(x) {
-        return Some(Rc::new(a));
+        return Some(Rc::clone(&a));
     } else {
-        match car(x) {
-            Some(expr) => 
-                match car(y) {
-                    Some(expr1) => None,
-                    None => None,
-                },
-            None => None,
-        }
+        let carx = car(x)?;
+        let cary = car(y)?;
+        let cdrx = cdr(x)?;
+        let cdry = cdr(y)?;
+        let rest_of_the_env = pairlis(&cdrx, &cdry, a)?;
+        return Some(Rc::new(new_cons(
+            Rc::new(new_cons(Rc::clone(&carx), Rc::clone(&cary))),
+            Rc::clone(&rest_of_the_env),
+        )));
     }
 }

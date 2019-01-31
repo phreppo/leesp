@@ -88,11 +88,23 @@ fn main() {
 
     let symbol2 = new_symbol("s2".to_string());
     let string2 = new_str("salame".to_string());
-    let assoc2 = new_cons(Rc::new(symbol2), Rc::new(string2));
-    let env1 = new_cons(Rc::new(assoc1), Rc::new(new_cons(Rc::new(assoc2),Rc::new(new_nil()))));
-    println!("{}",  env1);
-    match assoc(&new_symbol("s2".to_string()),&env1) {
+    // let assoc2 = new_cons(Rc::new(symbol2), Rc::new(string2));
+    // let env1 = new_cons(Rc::new(assoc1), Rc::new(new_cons(Rc::new(assoc2),Rc::new(new_nil()))));
+    // println!("{}",  env1);
+    // match assoc(&new_symbol("s2".to_string()),&env1) {
+    //     Some(expr) => println!("{}",  expr),
+    //     None => println!("We have no found any assoc" ),
+    // }
+    let first_list = new_cons(Rc::new(symbol2), Rc::new(new_nil()));
+    println!("{}",  first_list);
+    let second_list = new_cons(Rc::new(string2), Rc::new(new_nil()));
+    println!("{}",  second_list);
+    let pairlis1 = pairlis(
+        &first_list, 
+        &second_list, 
+        Rc::new(new_cons(Rc::new(assoc1),Rc::new(new_nil()))));
+    match pairlis1 {
         Some(expr) => println!("{}",  expr),
-        None => println!("We have no found any assoc" ),
+        None => println!("shit"),
     }
 }
