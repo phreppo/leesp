@@ -13,3 +13,4 @@ cose discutibili di rust
 . mi sono piaciuti gli algebraic data types
 . il supporto builtin ad un sacco di cose
 . i tratti e l astrazione zero cost
+. test anche sulla docuemntazione
