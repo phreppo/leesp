@@ -4,6 +4,7 @@ use std::io::prelude::*;
 
 extern crate leesp;
 use leesp::lispcore::*;
+use leesp::language::*;
 
 #[macro_use]
 extern crate lalrpop_util;

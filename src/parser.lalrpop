@@ -1,13 +1,15 @@
 use std::str::FromStr;
 use leesp::lispcore::{
+    build_strange_cons,
+    new_str_with_quotes
+};
+use leesp::language::{
     Cell,
     new_nil,
     new_num,
     new_symbol,
     new_str,
-    new_cons,
-    build_strange_cons,
-    new_str_with_quotes
+    new_cons
 };
 
 grammar;

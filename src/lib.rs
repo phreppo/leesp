@@ -1,8 +1,10 @@
+pub mod language;
 pub mod lispcore;
 
 #[cfg(test)]
 mod tests {
     use lispcore::*;
+    use language::*;
     use std::rc::Rc;
 
     fn n(num: i32) -> Cell {
