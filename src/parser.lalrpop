@@ -1,9 +1,9 @@
 use std::str::FromStr;
-use leesp::lispcore::{
+use lispcore::{
     build_strange_cons,
     new_str_with_quotes
 };
-use leesp::language::{
+use language::{
     Cell,
     new_nil,
     new_num,

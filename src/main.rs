@@ -5,42 +5,39 @@ use std::io::prelude::*;
 extern crate leesp;
 use leesp::lispcore::*;
 use leesp::language::*;
+use leesp::parser::*;
 
-#[macro_use]
-extern crate lalrpop_util;
-
-lalrpop_mod!(pub parser); // synthesized by LALRPOP
 
 #[test]
 fn lisp_parser() {
-    let result = parser::SexprParser::new().parse("NIL").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("NIL").unwrap();
     assert_eq!(result, new_nil());
 
-    let result = parser::SexprParser::new().parse("2").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("2").unwrap();
     assert_eq!(result, new_num(2));
 
-    let result = parser::SexprParser::new().parse("-2").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("-2").unwrap();
     assert_eq!(result, new_num(-2));
 
-    let result = parser::SexprParser::new().parse("car").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("car").unwrap();
     assert_eq!(result, new_symbol("car".to_string()));
 
-    let result = parser::SexprParser::new().parse("car").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("car").unwrap();
     assert_eq!(result, new_symbol("CAR".to_string()));
 
-    let result = parser::SexprParser::new().parse("sTrAnGeVaR123").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("sTrAnGeVaR123").unwrap();
     assert_eq!(result, new_symbol("STRANGEVAR123".to_string()));
 
-    let result = parser::SexprParser::new().parse("'string'").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("'string'").unwrap();
     assert_eq!(result, new_str("'string'".to_string()));
 
-    let result = parser::SexprParser::new().parse("(ciao . NIL)").unwrap();
+    let result = leesp::parser::SexprParser::new().parse("(ciao . NIL)").unwrap();
     assert_eq!(
         result,
         new_cons(Rc::new(new_symbol("ciao".to_string())), Rc::new(new_nil()))
     );
 
-    let result = parser::SexprParser::new()
+    let result = leesp::parser::SexprParser::new()
         .parse("(ciao . (1 . NIL))")
         .unwrap();
     assert_eq!(
@@ -61,7 +58,7 @@ fn repl() {
             Ok(n) => {
                 println!(
                     "{}",
-                    parser::SexprParser::new().parse(&input.to_owned()).unwrap()
+                    leesp::parser::SexprParser::new().parse(&input.to_owned()).unwrap()
                 );
             }
             Err(error) => println!("error reading string: {}", error),

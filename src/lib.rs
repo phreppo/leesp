@@ -1,6 +1,11 @@
 pub mod language;
 pub mod lispcore;
 
+#[macro_use]
+extern crate lalrpop_util;
+
+lalrpop_mod!(pub parser); // synthesized by LALRPOP
+
 #[cfg(test)]
 mod tests {
     use lispcore::*;
