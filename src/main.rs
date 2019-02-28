@@ -1,89 +1,78 @@
+use std::io;
 use std::rc::Rc;
-extern crate leesp;
+use std::io::prelude::*; 
 
+extern crate leesp;
 use leesp::lispcore::*;
 
+#[macro_use]
+extern crate lalrpop_util;
 
-#[macro_use] extern crate lalrpop_util;
-
-lalrpop_mod!(pub calculator1); // synthesized by LALRPOP
 lalrpop_mod!(pub parser); // synthesized by LALRPOP
-
-#[test]
-fn calculator1() {
-    // NB: parse returns a slice
-    assert!(calculator1::TermParser::new().parse("22").is_ok());
-    assert!(calculator1::TermParser::new().parse("(22)").is_ok());
-    assert!(calculator1::TermParser::new().parse("((((22))))").is_ok());
-    assert!(calculator1::TermParser::new().parse("((22)").is_err());
-}
 
 #[test]
 fn lisp_parser() {
     let result = parser::SexprParser::new().parse("NIL").unwrap();
-    assert_eq!(result,new_nil());
+    assert_eq!(result, new_nil());
 
     let result = parser::SexprParser::new().parse("2").unwrap();
-    assert_eq!(result,new_num(2));
+    assert_eq!(result, new_num(2));
 
     let result = parser::SexprParser::new().parse("-2").unwrap();
-    assert_eq!(result,new_num(-2));
+    assert_eq!(result, new_num(-2));
 
     let result = parser::SexprParser::new().parse("car").unwrap();
-    assert_eq!(result,new_symbol("car".to_string()));
+    assert_eq!(result, new_symbol("car".to_string()));
 
     let result = parser::SexprParser::new().parse("car").unwrap();
-    assert_eq!(result,new_symbol("CAR".to_string()));
+    assert_eq!(result, new_symbol("CAR".to_string()));
 
     let result = parser::SexprParser::new().parse("sTrAnGeVaR123").unwrap();
-    assert_eq!(result,new_symbol("STRANGEVAR123".to_string()));
+    assert_eq!(result, new_symbol("STRANGEVAR123".to_string()));
 
     let result = parser::SexprParser::new().parse("'string'").unwrap();
-    assert_eq!(result,new_str("'string'".to_string()));
+    assert_eq!(result, new_str("'string'".to_string()));
+
+    let result = parser::SexprParser::new().parse("(ciao . NIL)").unwrap();
+    assert_eq!(
+        result,
+        new_cons(Rc::new(new_symbol("ciao".to_string())), Rc::new(new_nil()))
+    );
+
+    let result = parser::SexprParser::new()
+        .parse("(ciao . (1 . NIL))")
+        .unwrap();
+    assert_eq!(
+        result,
+        new_cons(
+            Rc::new(new_symbol("ciao".to_string())),
+            Rc::new(new_cons(Rc::new(new_num(1)), Rc::new(new_nil())))
+        )
+    );
 }
 
-#[test]
-fn calculator11() {
-    // These will all work:
-
-    let result = calculator1::TermParser::new().parse("33").unwrap();
-    assert_eq!(result, "33");
-
-    let result = calculator1::TermParser::new().parse("foo33").unwrap();
-    assert_eq!(result, "Id(foo33)");
-
-    let result = calculator1::TermParser::new().parse("(foo33)").unwrap();
-    assert_eq!(result, "Id(foo33)");
-    
-    // This one will fail:
-
-    let result = calculator1::TermParser::new().parse("(22)").unwrap();
-    assert_eq!(result, "Twenty-two!");
+fn repl() {
+    loop {
+        print!("> ");
+        io::stdout().flush().unwrap();
+        let mut input = String::new();
+        match io::stdin().read_line(&mut input) {
+            Ok(n) => {
+                println!(
+                    "{}",
+                    parser::SexprParser::new().parse(&input.to_owned()).unwrap()
+                );
+            }
+            Err(error) => println!("error reading string: {}", error),
+        }
+    }
 }
-
-// pub fn new_num<'a>(num: i32) -> Cell<'a> {
-//     Cell::Num(num)
-// }
-
-// pub fn new_nil<'a>() -> Cell<'a> {
-//     Cell::Nil
-// }
-
-// pub fn new_cons<'a>(car: &'a Cell, cdr: &'a Cell) -> Cell<'a> {
-//     Cell::Cons(car, cdr)
-// }
-
-// impl<'a> Display for Cell<'a> {
-//     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-//         match self {
-//             Cell::Num(n) => write!(f, "{}", n),
-//             Cell::Nil => write!(f, "Nil"),
-//             Cell::Cons(car, cdr) => write!(f, "({} . {})", car, cdr),
-//         }
-//     }
-// }
 
 fn main() {
+    repl();
+}
+
+fn tests() {
     let number1 = new_num(1);
     let number2 = new_num(2);
     let symbol1 = new_symbol("n".to_string());
@@ -124,10 +113,10 @@ fn main() {
         None => println!("shit!"),
     };
 
-    println!("{}",  reference_to_n1);
-    println!("{}",  assoc1);
-    println!("{}",  eq(&assoc1,&assoc1_prime)); // equals!
-    println!("{}",  eq(&reference_to_n1,&assoc1_prime)); // false
+    println!("{}", reference_to_n1);
+    println!("{}", assoc1);
+    println!("{}", eq(&assoc1, &assoc1_prime)); // equals!
+    println!("{}", eq(&reference_to_n1, &assoc1_prime)); // false
 
     match maybe_car(Some(&assoc1)) {
         Some(expr) => expr,
@@ -142,7 +131,7 @@ fn main() {
     // println!("{}",  assoc3);
 
     let car_cell = new_symbol("QUOTE".to_string());
-    println!("> {}",  is_symbol(&car_cell, Symbol::CDR));
+    println!("> {}", is_symbol(&car_cell, Symbol::CDR));
 
     let symbol2 = new_symbol("s2".to_string());
     let string2 = new_str("salame".to_string());
@@ -154,18 +143,17 @@ fn main() {
     //     None => println!("We have no found any assoc" ),
     // }
     let first_list = new_cons(Rc::new(symbol2), Rc::new(new_nil()));
-    println!("{}",  first_list);
+    println!("{}", first_list);
     let second_list = new_cons(Rc::new(string2), Rc::new(new_nil()));
-    println!("{}",  second_list);
+    println!("{}", second_list);
     let pairlis1 = pairlis(
-        &first_list, 
-        &second_list, 
-        Rc::new(new_cons(Rc::new(assoc1),Rc::new(new_nil()))));
+        &first_list,
+        &second_list,
+        Rc::new(new_cons(Rc::new(assoc1), Rc::new(new_nil()))),
+    );
     match pairlis1 {
-    
-        Some(expr) => 
-        match eval(&new_symbol("n".to_string()), &expr) {
-            Some(result) => println!("{}",  result),
+        Some(expr) => match eval(&new_symbol("n".to_string()), &expr) {
+            Some(result) => println!("{}", result),
             None => println!("Shitet"),
         },
         None => println!("shit"),

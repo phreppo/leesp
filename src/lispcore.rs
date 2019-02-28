@@ -25,10 +25,10 @@ pub enum Cell {
 impl Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Cell::Nil => write!(f, "Nil"),
+            Cell::Nil => write!(f, "NIL"),
             Cell::Num(n) => write!(f, "{}", n),
             Cell::Str(s) => write!(f, "\"{}\"", s),
-            Cell::Symbol(s) => write!(f, "\"{}\"", s),
+            Cell::Symbol(s) => write!(f, "{}", s),
             Cell::Cons(car, cdr) => write!(f, "({} . {})", car, cdr),
         }
     }
@@ -183,4 +183,16 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>>{
         return Some(val);
     }
     return None;
+}
+
+// TODO: rename this
+pub fn build_strange_cons(s1: &str,c1: Cell, s2: &str,c2: Cell, s3: &str) -> Cell {
+    new_cons(Rc::new(c1), Rc::new(c2))
+}
+
+pub fn new_str_with_quotes(mut s: String) -> Cell{
+    s.remove(0);
+    let l = s.len();
+    s.remove(l - 1);
+    new_str(s)
 }

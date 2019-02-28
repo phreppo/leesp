@@ -15,3 +15,7 @@ cose discutibili di rust
 . i tratti e l astrazione zero cost
 . test anche sulla docuemntazione
 . cosa non piaciuta: i test dentro il codice (cita clean code)
+. libro bibbia
+. loop keyword che ha senso per cose pesanti
+. best practice nel libro bibbia (per programmi a linea di comando)
+. supporto utf 8
