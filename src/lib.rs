@@ -1,5 +1,4 @@
 pub mod lispcore;
-pub mod parser;
 
 #[cfg(test)]
 mod tests {

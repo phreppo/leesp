@@ -7,6 +7,7 @@ use leesp::lispcore::*;
 #[macro_use] extern crate lalrpop_util;
 
 lalrpop_mod!(pub calculator1); // synthesized by LALRPOP
+lalrpop_mod!(pub parser); // synthesized by LALRPOP
 
 #[test]
 fn calculator1() {
@@ -17,6 +18,48 @@ fn calculator1() {
     assert!(calculator1::TermParser::new().parse("((22)").is_err());
 }
 
+#[test]
+fn lisp_parser() {
+    let result = parser::SexprParser::new().parse("NIL").unwrap();
+    assert_eq!(result,new_nil());
+
+    let result = parser::SexprParser::new().parse("2").unwrap();
+    assert_eq!(result,new_num(2));
+
+    let result = parser::SexprParser::new().parse("-2").unwrap();
+    assert_eq!(result,new_num(-2));
+
+    let result = parser::SexprParser::new().parse("car").unwrap();
+    assert_eq!(result,new_symbol("car".to_string()));
+
+    let result = parser::SexprParser::new().parse("car").unwrap();
+    assert_eq!(result,new_symbol("CAR".to_string()));
+
+    let result = parser::SexprParser::new().parse("sTrAnGeVaR123").unwrap();
+    assert_eq!(result,new_symbol("STRANGEVAR123".to_string()));
+
+    let result = parser::SexprParser::new().parse("'string'").unwrap();
+    assert_eq!(result,new_str("'string'".to_string()));
+}
+
+#[test]
+fn calculator11() {
+    // These will all work:
+
+    let result = calculator1::TermParser::new().parse("33").unwrap();
+    assert_eq!(result, "33");
+
+    let result = calculator1::TermParser::new().parse("foo33").unwrap();
+    assert_eq!(result, "Id(foo33)");
+
+    let result = calculator1::TermParser::new().parse("(foo33)").unwrap();
+    assert_eq!(result, "Id(foo33)");
+    
+    // This one will fail:
+
+    let result = calculator1::TermParser::new().parse("(22)").unwrap();
+    assert_eq!(result, "Twenty-two!");
+}
 
 // pub fn new_num<'a>(num: i32) -> Cell<'a> {
 //     Cell::Num(num)

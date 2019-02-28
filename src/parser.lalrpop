@@ -1,0 +1,40 @@
+use std::str::FromStr;
+use leesp::lispcore::{
+    Cell,
+    new_nil,
+    new_num,
+    new_symbol,
+    new_str
+};
+
+grammar;
+
+// type inference!
+pub Sexpr: Cell = {
+    "NIL" => new_nil(),
+    Num,
+    Symbol,
+    String
+    // "(" <List> ")"
+};
+
+match {
+    "NIL"
+} else {
+    r"-*[0-9]+"
+} else {
+    r"\w+", 
+    _
+}
+
+Num: Cell = {
+    r"-*[0-9]+" => new_num(i32::from_str(<>).unwrap())
+};
+
+Symbol: Cell = {
+    r"\w+" => new_symbol(<>.to_string()) 
+}
+
+String: Cell = {
+    r"'\w+'" => new_str(<>.to_string()) 
+}

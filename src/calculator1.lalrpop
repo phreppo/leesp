@@ -3,6 +3,21 @@ use std::str::FromStr;
 grammar;
 
 // type inference!
-pub Term = { Num, "(" <Term> ")" };
+pub Term = {
+    Num,
+    "(" <Term> ")",
+    "22" => format!("Twenty-two!"),
+    ID => format!("Id({})", <>), // <-- we added this
+};
 
-Num: i32 = <s:r"[0-9]+"> => i32::from_str(s).unwrap();
+match {
+    r"(?i)begin" => "BEGIN",
+    r"[0-9]+",
+    "22"
+} else {
+    r"\w+" => ID, // <-- give a name here
+    _
+}
+
+
+Num: String = r"[0-9]+" => <>.to_string();
