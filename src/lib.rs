@@ -4,7 +4,13 @@ pub mod lispcore;
 #[macro_use]
 extern crate lalrpop_util;
 
-lalrpop_mod!(pub parser); // synthesized by LALRPOP
+lalrpop_mod!(_parser); // synthesized by LALRPOP
+
+pub mod parser {
+    fn parse(s: &'str) { // TODO: ripartire da qui
+        leesp::parser::SexprParser::new().parse("2").unwrap()
+    }
+}
 
 #[cfg(test)]
 mod tests {
