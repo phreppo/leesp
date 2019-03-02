@@ -1,6 +1,6 @@
 use std::str::FromStr;
 use lispcore::{
-    build_strange_cons,
+    build_parser_cons,
     new_str_with_quotes
 };
 use language::{
@@ -46,5 +46,5 @@ String: Cell = {
 }
 
 Cons: Cell = {
-    "(" Sexpr "." Sexpr ")" => build_strange_cons(<>)
+    "(" Sexpr "." Sexpr ")" => build_parser_cons(<>)
 }
