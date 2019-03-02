@@ -42,7 +42,7 @@ Symbol: Cell = {
 }
 
 String: Cell = {
-    r"'\w+'" => new_str_with_quotes(<>.to_string()) 
+    r"'[\w ]+'" => new_str_with_quotes(<>.to_string()) 
 }
 
 Cons: Cell = {

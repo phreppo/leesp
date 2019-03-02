@@ -10,43 +10,43 @@ use leesp::parser::*;
 
 #[test]
 fn lisp_parser() {
-    let result = leesp::parser::SexprParser::new().parse("NIL").unwrap();
+    let result = parse("NIL");
     assert_eq!(result, new_nil());
 
-    let result = leesp::parser::SexprParser::new().parse("2").unwrap();
+    let result = parse("2");
     assert_eq!(result, new_num(2));
 
-    let result = leesp::parser::SexprParser::new().parse("-2").unwrap();
+    let result = parse("-2");
     assert_eq!(result, new_num(-2));
 
-    let result = leesp::parser::SexprParser::new().parse("car").unwrap();
+    let result = parse("car");
     assert_eq!(result, new_symbol("car".to_string()));
 
-    let result = leesp::parser::SexprParser::new().parse("car").unwrap();
+    let result = parse("car");
     assert_eq!(result, new_symbol("CAR".to_string()));
 
-    let result = leesp::parser::SexprParser::new().parse("sTrAnGeVaR123").unwrap();
+    let result = parse("sTrAnGeVaR123");
     assert_eq!(result, new_symbol("STRANGEVAR123".to_string()));
 
-    let result = leesp::parser::SexprParser::new().parse("'string'").unwrap();
+    let result = parse("'string'");
     assert_eq!(result, new_str("'string'".to_string()));
 
-    let result = leesp::parser::SexprParser::new().parse("(ciao . NIL)").unwrap();
+    let result = parse("(ciao . NIL)");
     assert_eq!(
         result,
         new_cons(Rc::new(new_symbol("ciao".to_string())), Rc::new(new_nil()))
     );
 
-    let result = leesp::parser::SexprParser::new()
-        .parse("(ciao . (1 . NIL))")
-        .unwrap();
-    assert_eq!(
-        result,
-        new_cons(
-            Rc::new(new_symbol("ciao".to_string())),
-            Rc::new(new_cons(Rc::new(new_num(1)), Rc::new(new_nil())))
-        )
-    );
+    // let result = leesp::parser::
+    //     .parse("(ciao . (1 . NIL))")
+    //     .unwrap();
+    // assert_eq!(
+    //     result,
+    //     new_cons(
+    //         Rc::new(new_symbol("ciao".to_string())),
+    //         Rc::new(new_cons(Rc::new(new_num(1)), Rc::new(new_nil())))
+    //     )
+    // );
 }
 
 fn repl() {
@@ -58,7 +58,7 @@ fn repl() {
             Ok(n) => {
                 println!(
                     "{}",
-                    leesp::parser::SexprParser::new().parse(&input.to_owned()).unwrap()
+                    leesp::parser::parse(&input.to_owned())
                 );
             }
             Err(error) => println!("error reading string: {}", error),

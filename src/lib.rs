@@ -1,16 +1,11 @@
-pub mod language;
-pub mod lispcore;
-
 #[macro_use]
 extern crate lalrpop_util;
 
 lalrpop_mod!(_parser); // synthesized by LALRPOP
 
-pub mod parser {
-    fn parse(s: &'str) { // TODO: ripartire da qui
-        leesp::parser::SexprParser::new().parse("2").unwrap()
-    }
-}
+pub mod language;
+pub mod lispcore;
+pub mod parser;
 
 #[cfg(test)]
 mod tests {
