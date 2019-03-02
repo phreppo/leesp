@@ -45,7 +45,6 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>>{
     return None;
 }
 
-// TODO: rename this
 pub fn build_parser_cons(s1: &str,c1: Cell, s2: &str,c2: Cell, s3: &str) -> Cell {
     new_cons(Rc::new(c1), Rc::new(c2))
 }

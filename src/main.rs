@@ -14,10 +14,10 @@ fn repl() {
         let mut input = String::new();
         match io::stdin().read_line(&mut input) {
             Ok(n) => {
-                println!(
-                    "{}",
-                    leesp::parser::parse(&input.to_owned())
-                );
+                match leesp::parser::parse(&input.to_owned()) {
+                    Ok(cell) => println!("{}",  cell),
+                    Err(_) => println!("Parse error"),
+                }
             }
             Err(error) => println!("error reading string: {}", error),
         }

@@ -1,48 +1,40 @@
 use language::*;
 use _parser::*;
 
-pub fn parse(s: &str) -> Cell {
+pub fn parse(s: &str) -> Result<Cell, lalrpop_util::ParseError<usize,Token,&str>> {
     // TODO: permettere di recuperare i parsing errors
-    SexprParser::new().parse(s).unwrap()
+    SexprParser::new().parse(s)
 }
+
+fn assert_parse_ok (s: &str, c: Cell) {
+    match parse(s) {
+        Ok(cell) => assert_eq!(cell, c),
+        Err(_) => panic!(),
+    }
+} 
 
 #[test]
 fn lisp_parser() {
     use std::rc::Rc;
 
-    let result = parse("NIL");
-    assert_eq!(result, new_nil());
+    assert_parse_ok("NIL", new_nil());
 
-    let result = parse("2");
-    assert_eq!(result, new_num(2));
+    assert_parse_ok("2", new_num(2));
 
-    let result = parse("-2");
-    assert_eq!(result, new_num(-2));
+    assert_parse_ok("-2", new_num(-2));
 
-    let result = parse("car");
-    assert_eq!(result, new_symbol("car".to_string()));
+    assert_parse_ok("car", new_symbol("car".to_string()));
 
-    let result = parse("car");
-    assert_eq!(result, new_symbol("CAR".to_string()));
+    assert_parse_ok("car", new_symbol("CAR".to_string()));
 
-    let result = parse("sTrAnGeVaR123");
-    assert_eq!(result, new_symbol("STRANGEVAR123".to_string()));
+    assert_parse_ok("sTrAnGeVaR123", new_symbol("STRANGEVAR123".to_string()));
 
-    let result = parse("'string'");
-    assert_eq!(result, new_str("string".to_string()));
+    assert_parse_ok("'string'", new_str("string".to_string()));
 
-    let result = parse("(ciao . NIL)");
-    assert_eq!(
-        result,
-        new_cons(Rc::new(new_symbol("ciao".to_string())), Rc::new(new_nil()))
-    );
+    assert_parse_ok("(ciao . NIL)", new_cons(Rc::new(new_symbol("ciao".to_string())), Rc::new(new_nil())));
 
-    let result = parse("(ciao . (1 . NIL))");
-    assert_eq!(
-        result,
-        new_cons(
+    assert_parse_ok("(ciao . (1 . NIL))",         new_cons(
             Rc::new(new_symbol("ciao".to_string())),
             Rc::new(new_cons(Rc::new(new_num(1)), Rc::new(new_nil())))
-        )
-    );
+    ));
 }
