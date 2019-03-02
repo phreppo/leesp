@@ -2,7 +2,8 @@ use std::fmt;
 use std::fmt::Display;
 use std::rc::Rc;
 
-const BUILTIN_LAMBDAS: &'static [&'static str] = &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE"];
+const BUILTIN_LAMBDAS: &'static [&'static str] = 
+    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND"];
 
 pub enum Symbol {
     CAR,
@@ -10,6 +11,7 @@ pub enum Symbol {
     CONS,
     LAMBDA,
     QUOTE,
+    COND,
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -138,6 +140,7 @@ pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
             Symbol::CONS => BUILTIN_LAMBDAS[2].eq_ignore_ascii_case(&symbol_string),
             Symbol::LAMBDA => BUILTIN_LAMBDAS[3].eq_ignore_ascii_case(&symbol_string),
             Symbol::QUOTE => BUILTIN_LAMBDAS[4].eq_ignore_ascii_case(&symbol_string),
+            Symbol::COND => BUILTIN_LAMBDAS[5].eq_ignore_ascii_case(&symbol_string),
         },
         _ => false,
     }

@@ -21,3 +21,4 @@ cose discutibili di rust
 . supporto utf 8
 . supporto ai colori in liena con la filosofia, perche e multipiattaforma (invece quello del C di mettere dei caratteri e un po rozzo)
 . il longjump viene evitato
+. la differenza per fare un car o un cdr imopressionante fra rust e c

@@ -3,7 +3,40 @@ use std::rc::Rc;
 
 // ==================== BASIC EVALUATOR ====================
 
-pub fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
+pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>>{
+    if atom(e){
+        match e {
+            Cell::Symbol(s) => return eval_assoc(e,a),
+            _               => return Some(Rc::new(e.clone())),
+        };
+    } else {
+        let car = car(e)?;
+        if atom(&car){
+            return eval_atom_car(e, &car, a);
+        } else {
+            return None;
+        }
+        return None;
+    }
+    return None;
+}
+
+fn eval_assoc(sym: &Cell, a: &Cell) -> Option<Rc<Cell>>{
+    let val = assoc(sym, a)?;
+    return Some(val)
+}
+
+fn eval_atom_car(e :&Cell, macr: &Cell, a: &Cell) -> Option<Rc<Cell>> {
+    if is_symbol(macr, Symbol::QUOTE) {
+        return cadr(e);
+    } else if is_symbol(macr, Symbol::COND) {
+        // TODO
+        println!("eval cond");
+    } 
+    return None;
+}
+
+fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     match caar(a) {
         Some(reference) => {
             if eq(x, &reference) {
@@ -20,7 +53,7 @@ pub fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
 }
 
 pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
-    if null(x) {
+    if null(x) { // check on the nullness of y?
         return Some(Rc::clone(&a));
     } else {
         let carx = car(x)?;
@@ -33,21 +66,6 @@ pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
             Rc::clone(&rest_of_the_env),
         )));
     }
-}
-
-pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>>{
-    if atom(e){
-        match e {
-            Cell::Symbol(s) => return eval_assoc(e,a),
-            _               => return Some(Rc::new(e.clone())),
-        };
-    }
-    return None;
-}
-
-fn eval_assoc(sym: &Cell, a: &Cell) -> Option<Rc<Cell>>{
-    let val = assoc(sym, a)?;
-    return Some(val)
 }
 
 pub fn build_parser_cons(s1: &str,c1: Cell, s2: &str,c2: Cell, s3: &str) -> Cell {
