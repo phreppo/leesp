@@ -7,6 +7,14 @@ use leesp::lispcore::*;
 use leesp::language::*;
 use leesp::parser::*;
 
+fn eval_cell(c : Cell) {
+    println!("Evaluating {}", c);
+    match leesp::lispcore::eval(&c, &new_nil()){
+        Some(result) => println!("{}",  result),
+        None => println!("Error evaluating expression")
+    }
+}
+
 fn repl() {
     loop {
         print!("> ");
@@ -15,7 +23,7 @@ fn repl() {
         match io::stdin().read_line(&mut input) {
             Ok(n) => {
                 match leesp::parser::parse(&input.to_owned()) {
-                    Ok(cell) => println!("{}",  cell),
+                    Ok(cell) => eval_cell(cell),
                     Err(_) => println!("Parse error"),
                 }
             }

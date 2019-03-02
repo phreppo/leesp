@@ -1,6 +1,4 @@
 use language::*;
-use std::fmt;
-use std::fmt::Display;
 use std::rc::Rc;
 
 // ==================== BASIC EVALUATOR ====================
@@ -39,10 +37,17 @@ pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
 
 pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>>{
     if atom(e){
-        let val = assoc(e, a)?;
-        return Some(val);
+        match e {
+            Cell::Symbol(s) => return eval_assoc(e,a),
+            _               => return Some(Rc::new(e.clone())),
+        };
     }
     return None;
+}
+
+fn eval_assoc(sym: &Cell, a: &Cell) -> Option<Rc<Cell>>{
+    let val = assoc(sym, a)?;
+    return Some(val)
 }
 
 pub fn build_parser_cons(s1: &str,c1: Cell, s2: &str,c2: Cell, s3: &str) -> Cell {

@@ -2,7 +2,6 @@ use language::*;
 use _parser::*;
 
 pub fn parse(s: &str) -> Result<Cell, lalrpop_util::ParseError<usize,Token,&str>> {
-    // TODO: permettere di recuperare i parsing errors
     SexprParser::new().parse(s)
 }
 
