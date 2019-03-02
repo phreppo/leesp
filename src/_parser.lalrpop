@@ -1,7 +1,10 @@
 use std::str::FromStr;
 use lispcore::{
     build_parser_cons,
-    new_str_with_quotes
+    new_str_with_quotes,
+    build_list,
+    build_list_with_last_element,
+    build_quoted_list
 };
 use language::{
     Cell,
@@ -18,8 +21,11 @@ pub Sexpr: Cell = {
     Num,
     Symbol,
     String,
-    Cons
-    // "(" <List> ")"
+    Cons,
+    "'" "(" Sexpr+ ")" => build_quoted_list(<>), 
+    "(" Sexpr+ ")" => build_list(<>, new_nil()),
+    // TODO: fix this... not so important
+    // "(" Sexpr+ "." Sexpr ")" => build_list_with_last_element(<>)
 };
 
 match {
