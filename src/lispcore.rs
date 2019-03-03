@@ -7,7 +7,7 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if is_atomic(e) {
         println!("eval atom expr {}",  e);
         match e {
-            Cell::Symbol(s) => return eval_assoc(e, a),
+            Cell::Symbol(_) => return eval_assoc(e, a),
             Cell::Nil => return Some(Rc::new(new_nil())),
             _ => return Some(Rc::new(e.clone())),
         };
@@ -18,9 +18,7 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
         } else {
             return None;
         }
-        return None;
     }
-    return None;
 }
 
 fn eval_assoc(sym: &Cell, a: &Cell) -> Option<Rc<Cell>> {
@@ -61,6 +59,9 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
             let first = car(x)?;
             let second = cadr(x)?;
             return Some(Rc::new(eq(&first,&second)));
+        } else {
+            let valued_f = eval(f,a)?;
+            return apply(&valued_f, x, a);
         }
     }
     return None;

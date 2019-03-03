@@ -3,7 +3,6 @@ use parser::{
     build_parser_cons,
     new_str_with_quotes,
     build_list,
-    build_list_with_last_element,
     build_quoted_list
 };
 use language::{
