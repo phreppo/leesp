@@ -67,38 +67,3 @@ pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
         )));
     }
 }
-
-pub fn build_parser_cons(s1: &str,c1: Cell, s2: &str,c2: Cell, s3: &str) -> Cell {
-    new_cons(Rc::new(c1), Rc::new(c2))
-}
-
-pub fn new_str_with_quotes(mut s: String) -> Cell {
-    s.remove(0);
-    let l = s.len();
-    s.remove(l - 1);
-    new_str(s)
-}
-
-pub fn build_list(s1: &str, exps : Vec<Cell>, s2: &str, last : Cell) -> Cell {
-    let mut last_cdr = last;
-    for x in exps.iter().rev() {
-        let new_co = new_cons(
-            Rc::new(x.clone()), 
-            Rc::new(last_cdr)
-        ); 
-        last_cdr = new_co; 
-    }
-    return last_cdr;
-}
-
-pub fn build_quoted_list(quote: &str,opened_par: &str, exps : Vec<Cell>, closed_par: &str) -> Cell {
-    new_cons(
-        Rc::new(new_symbol("QUOTE".to_string())), 
-        Rc::new(new_cons(
-            Rc::new(build_list(opened_par, exps, closed_par, new_nil())),
-            Rc::new(new_nil()))))
-}
-
-pub fn build_list_with_last_element(opened_par: &str, exps : Vec<Cell>, point: &str, last : Cell, closed_par: &str) -> Cell {
-    build_list(opened_par, exps, closed_par, last)
-}

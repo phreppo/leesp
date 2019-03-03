@@ -1,5 +1,5 @@
 use std::str::FromStr;
-use lispcore::{
+use parser::{
     build_parser_cons,
     new_str_with_quotes,
     build_list,
