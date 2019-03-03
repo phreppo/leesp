@@ -5,7 +5,7 @@ use std::rc::Rc;
 
 pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if is_atomic(e) {
-        println!("eval atom expr {}",  e);
+        println!("eval atom expr {}", e);
         match e {
             Cell::Symbol(_) => return eval_assoc(e, a),
             Cell::Nil => return Some(Rc::new(new_nil())),
@@ -16,7 +16,7 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
         if is_atomic(&car) {
             return eval_atom_car(e, &car, a);
         } else {
-            return None;
+            return eval_non_atom_car(e, &car, a);
         }
     }
 }
@@ -36,7 +36,15 @@ fn eval_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     println!("gonna apply");
     let args = cdr(e)?;
     let evaluated_args = evlis(&args, a)?;
-    println!("evlisted: {}", evaluated_args );
+    println!("evlisted: {}", evaluated_args);
+    return apply(f, &evaluated_args, a);
+}
+
+fn eval_non_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {
+    println!("gonna apply");
+    let args = cdr(e)?;
+    let evaluated_args = evlis(&args, a)?;
+    println!("evlisted: {}", evaluated_args);
     return apply(f, &evaluated_args, a);
 }
 
@@ -45,26 +53,28 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if is_atomic(f) {
         if is_symbol(f, Symbol::CAR) {
             return caar(x);
-        } else if is_symbol(f, Symbol::CDR){
+        } else if is_symbol(f, Symbol::CDR) {
             return cdar(x);
         } else if is_symbol(f, Symbol::CONS) {
             let car = car(x)?;
             let cadr = cadr(x)?;
-            return Some(
-                Rc::new( new_cons(car, cadr)));
+            return Some(Rc::new(new_cons(car, cadr)));
         } else if is_symbol(f, Symbol::ATOM) {
             let car = car(x)?;
             return Some(Rc::new(atom(&car)));
         } else if is_symbol(f, Symbol::EQ) {
             let first = car(x)?;
             let second = cadr(x)?;
-            return Some(Rc::new(eq(&first,&second)));
+            return Some(Rc::new(eq(&first, &second)));
         } else {
-            let valued_f = eval(f,a)?;
+            let valued_f = eval(f, a)?;
             return apply(&valued_f, x, a);
         }
+    } else {
+        // higer order support
+        let valued_f = eval(f, a)?;
+        return apply(&valued_f, x, a);
     }
-    return None;
 }
 
 fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
@@ -102,15 +112,15 @@ pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
 }
 
 pub fn evlis(m: &Cell, a: &Cell) -> Option<Rc<Cell>> {
-    println!("evlis called" );
+    println!("evlis called");
     if null(m) {
-        println!("evlis null" );
+        println!("evlis null");
         return Some(Rc::new(new_nil()));
     } else {
         let first = car(m)?;
-        println!("evlis first: {}", first );
+        println!("evlis first: {}", first);
         let result = eval(&first, a)?;
-        println!("evlis first valued: {}", result );
+        println!("evlis first valued: {}", result);
         let rest = cdr(m)?;
         let rest_result = evlis(&rest, a)?;
         return Some(Rc::new(new_cons(result, rest_result)));
