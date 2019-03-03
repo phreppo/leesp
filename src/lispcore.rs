@@ -35,6 +35,9 @@ fn eval_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     } else if is_symbol(f, Symbol::COND) {
         let cdre = cdr(e)?;
         return evcon(&cdre, a);
+    } else if is_symbol(f, Symbol::LAMBDA){
+        // lambda autoquote feature
+        return Some(Rc::new(e.clone()));
     }
     println!("gonna apply");
     let args = cdr(e)?;
@@ -86,6 +89,14 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
             return apply(&valued_f, x, a);
         }
     } else {
+        let carf = car(f)?;
+        if is_symbol(&carf, Symbol::LAMBDA){
+            let lambda_body = caddr(f)?;
+            let cadrf = cadr(f)?;
+            let new_env = pairlis(&cadrf, x, Rc::new(a.clone()))?;
+            return eval(&lambda_body, &new_env);
+        }
+
         // higer order support
         let valued_f = eval(f, a)?;
         return apply(&valued_f, x, a);
