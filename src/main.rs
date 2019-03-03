@@ -6,7 +6,7 @@ use leesp::language::*;
 
 fn eval_cell(c : Cell) {
     println!("Evaluating {}", c);
-    match leesp::lispcore::eval(&c, &new_nil()){
+    match leesp::lispcore::eval(&c, &minimal_env()){
         Some(result) => println!("{}",  result),
         None => println!("Error evaluating expression")
     }

@@ -20,8 +20,8 @@ pub fn new_str_with_quotes(mut s: String) -> Cell {
 pub fn build_list(_s1: &str, exps: Vec<Cell>, _s2: &str, last: Cell) -> Cell {
     let mut last_cdr = last;
     for x in exps.iter().rev() {
-        let new_co = new_cons(Rc::new(x.clone()), Rc::new(last_cdr));
-        last_cdr = new_co;
+        let new_cons = new_cons(Rc::new(x.clone()), Rc::new(last_cdr));
+        last_cdr = new_cons;
     }
     return last_cdr;
 }

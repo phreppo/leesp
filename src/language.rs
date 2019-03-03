@@ -2,6 +2,8 @@ use std::fmt;
 use std::fmt::Display;
 use std::rc::Rc;
 
+use parser::parse;
+
 const BUILTIN_LAMBDAS: &'static [&'static str] = 
     &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND", "ATOM", "EQ"];
 
@@ -167,4 +169,12 @@ pub fn null(cell: &Cell) -> bool {
         Cell::Nil => true,
         _ => false,
     }
+}
+
+pub fn minimal_env() -> Cell {
+    parse(&"
+        ((L . (1 2 3))
+         (A . 1)
+         (B . 1)
+        )".to_string()).unwrap()
 }
