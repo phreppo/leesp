@@ -84,6 +84,8 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
             let first = car(x)?;
             let second = cadr(x)?;
             return Some(Rc::new(eq(&first, &second)));
+        } else if is_symbol(f,Symbol::PLUS) {
+            return apply_plus(x, a);
         } else {
             let valued_f = eval(f, a)?;
             return apply(&valued_f, x, a);
@@ -111,6 +113,24 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
         // higer order support
         let valued_f = eval(f, a)?;
         return apply(&valued_f, x, a);
+    }
+}
+
+fn apply_plus(args: &Cell, a: &Cell) -> Option<Rc<Cell>> {
+    return apply_plus_rec(args, a, 0);
+}
+
+fn apply_plus_rec(args: &Cell, a: &Cell, mut counter: i32) -> Option<Rc<Cell>> {
+    if null(args) {
+        return Some(Rc::new(new_num(counter)));
+    } else {
+        let act_var = car(args)?;
+        match *act_var {
+            Cell::Num(n) => counter += n,
+            _            => return None,
+        };
+        let next_arg = cdr(args)?;
+        return apply_plus_rec(&next_arg, a, counter);
     }
 }
 

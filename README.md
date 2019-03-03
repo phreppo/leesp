@@ -27,3 +27,5 @@ cose discutibili di rust
 . perche secondo me usa ancora i ;: c e la necessita di andare a capo in quanto un linguaggio motlo verboso
 . errori se tutto il match non coperto
 . invece di un milione di flag per l ottimizzazione passate alc ompilatore, basta usare cargo e la sua modalita per fare cose cool
+. tokei e stata fatta con questo: adatto a applicazioni cli
+. considerazioni: l interprete va N times piu lento, ma alla fine non mi ha mai dato segfault folli

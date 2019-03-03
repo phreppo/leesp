@@ -21,6 +21,7 @@ pub Sexpr: Cell = {
     Symbol,
     String,
     Cons,
+    "+" => new_symbol("+".to_string()),
     "'" "(" Sexpr+ ")" => build_quoted_list(<>), 
     "(" Sexpr+ ")" => build_list(<>, new_nil()),
     // TODO: fix this... not so important

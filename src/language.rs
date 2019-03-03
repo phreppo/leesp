@@ -5,7 +5,7 @@ use std::rc::Rc;
 use parser::parse;
 
 const BUILTIN_LAMBDAS: &'static [&'static str] = 
-    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND", "ATOM", "EQ", "T", "LABEL"];
+    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND", "ATOM", "EQ", "T", "LABEL", "+"];
 
 pub enum Symbol {
     CAR,
@@ -17,7 +17,8 @@ pub enum Symbol {
     ATOM,
     EQ,
     T, 
-    LABEL
+    LABEL, 
+    PLUS
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -155,6 +156,7 @@ pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
             Symbol::EQ     => BUILTIN_LAMBDAS[7].eq_ignore_ascii_case(&symbol_string),
             Symbol::T      => BUILTIN_LAMBDAS[8].eq_ignore_ascii_case(&symbol_string),
             Symbol::LABEL  => BUILTIN_LAMBDAS[9].eq_ignore_ascii_case(&symbol_string),
+            Symbol::PLUS  => BUILTIN_LAMBDAS[10].eq_ignore_ascii_case(&symbol_string),
         },
         _ => false,
     }
