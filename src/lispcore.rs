@@ -57,6 +57,10 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
         } else if is_symbol(f, Symbol::ATOM) {
             let car = car(x)?;
             return Some(Rc::new(atom(&car)));
+        } else if is_symbol(f, Symbol::EQ) {
+            let first = car(x)?;
+            let second = cadr(x)?;
+            return Some(Rc::new(eq(&first,&second)));
         }
     }
     return None;
@@ -66,7 +70,7 @@ fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     // let first_pair = caar(a)
     match caar(a) {
         Some(reference) => {
-            if eq(x, &reference) {
+            if is_eq(x, &reference) {
                 cdar(a)
             } else {
                 match cdr(a) {

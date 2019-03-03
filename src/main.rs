@@ -67,8 +67,6 @@ fn tests() {
 
     println!("{}", reference_to_n1);
     println!("{}", assoc1);
-    println!("{}", eq(&assoc1, &assoc1_prime)); // equals!
-    println!("{}", eq(&reference_to_n1, &assoc1_prime)); // false
 
     match maybe_car(Some(&assoc1)) {
         Some(expr) => expr,
