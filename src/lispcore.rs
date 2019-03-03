@@ -4,7 +4,7 @@ use std::rc::Rc;
 // ==================== BASIC EVALUATOR ====================
 
 pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
-    if atom(e) {
+    if is_atomic(e) {
         println!("eval atom expr {}",  e);
         match e {
             Cell::Symbol(s) => return eval_assoc(e, a),
@@ -13,7 +13,7 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
         };
     } else {
         let car = car(e)?;
-        if atom(&car) {
+        if is_atomic(&car) {
             return eval_atom_car(e, &car, a);
         } else {
             return None;
@@ -44,7 +44,7 @@ fn eval_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {
 
 fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     println!("appliying apply");
-    if atom(f) {
+    if is_atomic(f) {
         if is_symbol(f, Symbol::CAR) {
             return caar(x);
         } else if is_symbol(f, Symbol::CDR){
@@ -54,8 +54,10 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
             let cadr = cadr(x)?;
             return Some(
                 Rc::new( new_cons(car, cadr)));
+        } else if is_symbol(f, Symbol::ATOM) {
+            let car = car(x)?;
+            return Some(Rc::new(atom(&car)));
         }
-
     }
     return None;
 }

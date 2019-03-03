@@ -3,7 +3,7 @@ use std::fmt::Display;
 use std::rc::Rc;
 
 const BUILTIN_LAMBDAS: &'static [&'static str] = 
-    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND"];
+    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND", "ATOM"];
 
 pub enum Symbol {
     CAR,
@@ -12,6 +12,7 @@ pub enum Symbol {
     LAMBDA,
     QUOTE,
     COND,
+    ATOM
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -54,13 +55,6 @@ pub fn new_symbol(sym: String) -> Cell {
 
 pub fn new_cons(car: Rc<Cell>, cdr: Rc<Cell>) -> Cell {
     Cell::Cons(car, cdr)
-}
-
-pub fn atom(cell: &Cell) -> bool {
-    match cell {
-        Cell::Cons(_, _) => false,
-        _ => true,
-    }
 }
 
 pub fn car(cell: &Cell) -> Option<Rc<Cell>> {
@@ -112,6 +106,14 @@ pub fn cadr(cell: &Cell) -> Option<Rc<Cell>> {
     }
 }
 
+pub fn atom(cell: &Cell) -> Cell{
+    if is_atomic(cell) {
+        return new_t();
+    } else {
+        return new_nil();
+    }
+}
+
 // TODO: test this!
 pub fn caddr(cell: &Cell) -> Option<Rc<Cell>> {
     match maybe_cdr(Some(cell)) {
@@ -141,7 +143,19 @@ pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
             Symbol::LAMBDA => BUILTIN_LAMBDAS[3].eq_ignore_ascii_case(&symbol_string),
             Symbol::QUOTE  => BUILTIN_LAMBDAS[4].eq_ignore_ascii_case(&symbol_string),
             Symbol::COND   => BUILTIN_LAMBDAS[5].eq_ignore_ascii_case(&symbol_string),
+            Symbol::ATOM   => BUILTIN_LAMBDAS[6].eq_ignore_ascii_case(&symbol_string),
         },
         _ => false,
+    }
+}
+
+pub fn new_t() -> Cell {
+    new_symbol("T".to_string())
+}
+
+pub fn is_atomic(cell: &Cell) -> bool {
+    match cell {
+        Cell::Cons(_, _) => false,
+        _ => true,
     }
 }

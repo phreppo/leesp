@@ -60,21 +60,9 @@ fn tests() {
     //     println!("{}", reftonum);
     // }
 
-    println!("{}", atom(&number2));
-
-    match car(&assoc1) {
-        Some(expr) => println!("{}", atom(&expr)),
-        None => println!("shit!"),
-    };
-
     let reference_to_n1 = match car(&assoc1) {
         Some(expr) => expr,
         None => panic!("holy shit"),
-    };
-
-    match car(&assoc1) {
-        Some(expr) => println!("{}", atom(&expr)),
-        None => println!("shit!"),
     };
 
     println!("{}", reference_to_n1);
