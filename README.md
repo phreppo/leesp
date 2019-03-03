@@ -25,3 +25,4 @@ cose discutibili di rust
 . la differenza per fare un car o un cdr imopressionante fra rust e c
 . controlla le variabili non usate, ti controlla anche come le chiami e che rispetti le regole sintattiche
 . perche secondo me usa ancora i ;: c e la necessita di andare a capo in quanto un linguaggio motlo verboso
+. errori se tutto il match non coperto
