@@ -22,6 +22,9 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
 }
 
 fn eval_assoc(sym: &Cell, a: &Cell) -> Option<Rc<Cell>> {
+    if is_t(sym) {
+        return Some(Rc::new(new_t()));
+    }
     let val = assoc(sym, a)?;
     return Some(val);
 }
@@ -30,14 +33,26 @@ fn eval_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if is_symbol(f, Symbol::QUOTE) {
         return cadr(e);
     } else if is_symbol(f, Symbol::COND) {
-        // TODO
-        println!("eval cond");
+        let cdre = cdr(e)?;
+        return evcon(&cdre, a);
     }
     println!("gonna apply");
     let args = cdr(e)?;
     let evaluated_args = evlis(&args, a)?;
     println!("evlisted: {}", evaluated_args);
     return apply(f, &evaluated_args, a);
+}
+
+fn evcon(c: &Cell, a:&Cell) -> Option<Rc<Cell>> {
+    let caarc = caar(c)?;
+    let case_result = eval(&caarc, a)?;
+    if !null(&case_result) {
+        let cadarc = cadar(c)?;
+        return eval(&cadarc, a);
+    } else {
+        let cdrc = cdr(c)?;
+        return evcon(&cdrc, a);
+    }
 }
 
 fn eval_non_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {

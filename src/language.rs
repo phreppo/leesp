@@ -5,7 +5,7 @@ use std::rc::Rc;
 use parser::parse;
 
 const BUILTIN_LAMBDAS: &'static [&'static str] = 
-    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND", "ATOM", "EQ"];
+    &["CAR", "CDR", "CONS", "LAMBDA", "QUOTE", "COND", "ATOM", "EQ", "T"];
 
 pub enum Symbol {
     CAR,
@@ -15,7 +15,8 @@ pub enum Symbol {
     QUOTE,
     COND,
     ATOM,
-    EQ
+    EQ,
+    T
 }
 
 #[derive(Debug, PartialEq, Clone)]
@@ -63,14 +64,14 @@ pub fn new_cons(car: Rc<Cell>, cdr: Rc<Cell>) -> Cell {
 pub fn car(cell: &Cell) -> Option<Rc<Cell>> {
     match cell {
         Cell::Cons(car, _) => Some(Rc::clone(&car)),
-        _ => Option::None,
+        _ => None,
     }
 }
 
 pub fn cdr(cell: &Cell) -> Option<Rc<Cell>> {
     match cell {
         Cell::Cons(_, cdr) => Some(Rc::clone(&cdr)),
-        _ => Option::None,
+        _ => None,
     }
 }
 
@@ -91,21 +92,28 @@ pub fn maybe_cdr(maybe_cell: Option<&Cell>) -> Option<Rc<Cell>> {
 pub fn caar(cell: &Cell) -> Option<Rc<Cell>> {
     match maybe_car(Some(cell)) {
         Some(rc_to_cons_cell) => car(&rc_to_cons_cell),
-        _ => Option::None,
+        _ => None,
     }
 }
 
 pub fn cdar(cell: &Cell) -> Option<Rc<Cell>> {
     match maybe_car(Some(cell)) {
         Some(rc_to_cons_cell) => cdr(&rc_to_cons_cell),
-        _ => Option::None,
+        _ => None,
     }
 }
 
 pub fn cadr(cell: &Cell) -> Option<Rc<Cell>> {
     match maybe_cdr(Some(cell)) {
         Some(rc_to_cons_cell) => car(&rc_to_cons_cell),
-        _ => Option::None,
+        _ => None,
+    }
+}
+
+pub fn cadar(cell: &Cell) -> Option<Rc<Cell>> {
+    match maybe_car(Some(cell)) {
+        Some(rc_to_cons_cell) => cadr(&rc_to_cons_cell),
+        _ => None,
     }
 }
 
@@ -128,7 +136,7 @@ pub fn eq(cell1: &Cell, cell2: &Cell) -> Cell {
 pub fn caddr(cell: &Cell) -> Option<Rc<Cell>> {
     match maybe_cdr(Some(cell)) {
         Some(rc_to_cons_cell) => cadr(&rc_to_cons_cell),
-        _ => Option::None,
+        _ => None,
     }
 }
 
@@ -144,6 +152,7 @@ pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
             Symbol::COND   => BUILTIN_LAMBDAS[5].eq_ignore_ascii_case(&symbol_string),
             Symbol::ATOM   => BUILTIN_LAMBDAS[6].eq_ignore_ascii_case(&symbol_string),
             Symbol::EQ     => BUILTIN_LAMBDAS[7].eq_ignore_ascii_case(&symbol_string),
+            Symbol::T      => BUILTIN_LAMBDAS[8].eq_ignore_ascii_case(&symbol_string),
         },
         _ => false,
     }
@@ -162,6 +171,10 @@ pub fn is_atomic(cell: &Cell) -> bool {
 
 pub fn is_eq(cell1: &Cell, cell2: &Cell) -> bool {
     cell1 == cell2
+}
+
+pub fn is_t(cell: &Cell) -> bool {
+    cell == &(new_t())
 }
 
 pub fn null(cell: &Cell) -> bool {
