@@ -6,6 +6,7 @@ Possible solutions for che cons cell:
 . Cons(Rc<Cell>, Rc<Cell>), : everything is very clear and multiple references to the same cell are permitted, but very low performances. creating a new cons cell you must move
 . Cons()
 . Much more
+. approfondire differenza fra box e referenza
 
 cose discutibili di rust
 . non mi e piaciuto il sistema di testing
@@ -22,3 +23,5 @@ cose discutibili di rust
 . supporto ai colori in liena con la filosofia, perche e multipiattaforma (invece quello del C di mettere dei caratteri e un po rozzo)
 . il longjump viene evitato
 . la differenza per fare un car o un cdr imopressionante fra rust e c
+. controlla le variabili non usate, ti controlla anche come le chiami e che rispetti le regole sintattiche
+. perche secondo me usa ancora i ;: c e la necessita di andare a capo in quanto un linguaggio motlo verboso

@@ -135,12 +135,12 @@ pub fn null(cell: &Cell) -> bool {
 pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
     match cell {
         Cell::Symbol(symbol_string) => match symbol {
-            Symbol::CAR => BUILTIN_LAMBDAS[0].eq_ignore_ascii_case(&symbol_string),
-            Symbol::CDR => BUILTIN_LAMBDAS[1].eq_ignore_ascii_case(&symbol_string),
-            Symbol::CONS => BUILTIN_LAMBDAS[2].eq_ignore_ascii_case(&symbol_string),
+            Symbol::CAR    => BUILTIN_LAMBDAS[0].eq_ignore_ascii_case(&symbol_string),
+            Symbol::CDR    => BUILTIN_LAMBDAS[1].eq_ignore_ascii_case(&symbol_string),
+            Symbol::CONS   => BUILTIN_LAMBDAS[2].eq_ignore_ascii_case(&symbol_string),
             Symbol::LAMBDA => BUILTIN_LAMBDAS[3].eq_ignore_ascii_case(&symbol_string),
-            Symbol::QUOTE => BUILTIN_LAMBDAS[4].eq_ignore_ascii_case(&symbol_string),
-            Symbol::COND => BUILTIN_LAMBDAS[5].eq_ignore_ascii_case(&symbol_string),
+            Symbol::QUOTE  => BUILTIN_LAMBDAS[4].eq_ignore_ascii_case(&symbol_string),
+            Symbol::COND   => BUILTIN_LAMBDAS[5].eq_ignore_ascii_case(&symbol_string),
         },
         _ => false,
     }
