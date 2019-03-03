@@ -95,6 +95,17 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
             let cadrf = cadr(f)?;
             let new_env = pairlis(&cadrf, x, Rc::new(a.clone()))?;
             return eval(&lambda_body, &new_env);
+        } else if is_symbol(&carf, Symbol::LABEL) {
+            // ((label ff (lambda (x) (cond ((atom x) x ) (t (ff (car x)))))) '((a)))
+            let caddrf = caddr(f)?;
+            let cadrf  = cadr(f)?;
+            let first_cons = new_cons(
+                cadrf.clone(), 
+                caddrf.clone());
+            let second_cons = new_cons(
+                Rc::new(first_cons), 
+                Rc::new(a.clone()));
+            return apply(&caddrf, x, &second_cons);
         }
 
         // higer order support
