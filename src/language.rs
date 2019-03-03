@@ -27,7 +27,7 @@ pub enum Cell {
 impl Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
         match self {
-            Cell::Nil => write!(f, "NIL"),
+            Cell::Nil => write!(f, "[NIL]"),
             Cell::Num(n) => write!(f, "{}", n),
             Cell::Str(s) => write!(f, "\"{}\"", s),
             Cell::Symbol(s) => write!(f, "{}", s),

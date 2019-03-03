@@ -17,7 +17,7 @@ grammar;
 
 // type inference!
 pub Sexpr: Cell = {
-    "NIL" => new_nil(),
+    Nil,
     Num,
     Symbol,
     String,
@@ -29,13 +29,17 @@ pub Sexpr: Cell = {
 };
 
 match {
-    "NIL"
+    r"[Nn][Ii][Ll]"
 } else {
     r"-*[0-9]+"
 } else {
     r"\w+", 
     _
 }
+
+Nil : Cell = {
+    r"[Nn][Ii][Ll]" => new_nil()
+};
 
 Num: Cell = {
     r"-*[0-9]+" => new_num(i32::from_str(<>).unwrap())

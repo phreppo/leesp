@@ -5,8 +5,10 @@ use std::rc::Rc;
 
 pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if atom(e) {
+        println!("eval atom expr {}",  e);
         match e {
             Cell::Symbol(s) => return eval_assoc(e, a),
+            Cell::Nil => return Some(Rc::new(new_nil())),
             _ => return Some(Rc::new(e.clone())),
         };
     } else {
@@ -45,7 +47,15 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if atom(f) {
         if is_symbol(f, Symbol::CAR) {
             return caar(x);
+        } else if is_symbol(f, Symbol::CDR){
+            return cdar(x);
+        } else if is_symbol(f, Symbol::CONS) {
+            let car = car(x)?;
+            let cadr = cadr(x)?;
+            return Some(
+                Rc::new( new_cons(car, cadr)));
         }
+
     }
     return None;
 }
