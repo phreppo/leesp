@@ -62,15 +62,12 @@ fn evcon(c: &Cell, a:&Cell) -> Option<Rc<Cell>> {
 }
 
 fn eval_non_atom_car(e: &Cell, f: &Cell, a: &Cell) -> Option<Rc<Cell>> {
-    println!("gonna apply");
     let args = cdr(e)?;
     let evaluated_args = evlis(&args, a)?;
-    println!("evlisted: {}", evaluated_args);
     return apply(f, &evaluated_args, a);
 }
 
 fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
-    println!("appliying apply");
     if is_atomic(f) {
         if is_symbol(f, Symbol::CAR) {
             return caar(x);
@@ -138,7 +135,6 @@ fn apply_plus_rec(args: &Cell, a: &Cell, mut counter: i32) -> Option<Rc<Cell>> {
 }
 
 fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
-    // let first_pair = caar(a)
     match caar(a) {
         Some(reference) => {
             if is_eq(x, &reference) {
@@ -156,7 +152,6 @@ fn assoc(x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
 
 pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
     if null(x) || null(y) {
-        // check on the nullness of y?
         return Some(Rc::clone(&a));
     } else {
         let carx = car(x)?;
@@ -172,15 +167,11 @@ pub fn pairlis(x: &Cell, y: &Cell, a: Rc<Cell>) -> Option<Rc<Cell>> {
 }
 
 pub fn evlis(m: &Cell, a: &Cell) -> Option<Rc<Cell>> {
-    println!("evlis called");
     if null(m) {
-        println!("evlis null");
         return Some(Rc::new(new_nil()));
     } else {
         let first = car(m)?;
-        println!("evlis first: {}", first);
         let result = eval(&first, a)?;
-        println!("evlis first valued: {}", result);
         let rest = cdr(m)?;
         let rest_result = evlis(&rest, a)?;
         return Some(Rc::new(new_cons(result, rest_result)));
