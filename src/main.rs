@@ -4,7 +4,7 @@ use std::io::prelude::*;
 extern crate leesp;
 use leesp::language::*;
 
-fn eval_cell(c : Cell) {
+fn print(c : Cell) {
     println!("Evaluating {}", c);
     match leesp::lispcore::eval(&c, &minimal_env()){
         Some(result) => println!("{}",  result),
@@ -20,7 +20,7 @@ fn repl() {
         match io::stdin().read_line(&mut input) {
             Ok(_) => {
                 match leesp::parser::parse(&input.to_owned()) {
-                    Ok(cell) => eval_cell(cell),
+                    Ok(cell) => print(cell),
                     Err(_) => println!("Parse error"),
                 }
             }

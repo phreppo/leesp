@@ -14,7 +14,6 @@ use language::{
 
 grammar;
 
-// type inference!
 pub Sexpr: Cell = {
     Nil,
     Num,
