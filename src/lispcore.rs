@@ -5,12 +5,7 @@ use std::rc::Rc;
 
 pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if is_atomic(e) {
-        println!("eval atom expr {}", e);
-        match e {
-            Cell::Symbol(_) => return eval_assoc(e, a),
-            Cell::Nil => return Some(Rc::new(new_nil())),
-            _ => return Some(Rc::new(e.clone())),
-        };
+        return eval_atom(e, a);
     } else {
         let car = car(e)?;
         if is_atomic(&car) {
@@ -19,6 +14,14 @@ pub fn eval(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
             return eval_non_atom_car(e, &car, a);
         }
     }
+}
+
+fn eval_atom(e: &Cell, a: &Cell) -> Option<Rc<Cell>> {
+    match e {
+        Cell::Symbol(_) => return eval_assoc(e, a),
+        Cell::Nil => return Some(Rc::new(new_nil())),
+        _ => return Some(Rc::new(e.clone())),
+    };
 }
 
 fn eval_assoc(sym: &Cell, a: &Cell) -> Option<Rc<Cell>> {
