@@ -84,7 +84,7 @@ fn apply(f: &Cell, x: &Cell, a: &Cell) -> Option<Rc<Cell>> {
     if is_atomic(f) {
         return apply_atom_f(f, x, a);
     } else {
-        return apply_non_atom_f(d, x, a);
+        return apply_non_atom_f(f, x, a);
     }
 }
 

@@ -5,7 +5,6 @@ extern crate leesp;
 use leesp::language::*;
 
 fn print(c : Cell) {
-    println!("Evaluating {}", c);
     match leesp::evaluator::eval(&c, &minimal_env()){
         Some(result) => println!("{}",  result),
         None => println!("Error evaluating expression")
