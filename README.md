@@ -1,19 +1,17 @@
 # leesp
-Lisp interpreter
 
-----
-Possible solutions for che cons cell:
-. Cons(Rc<Cell>, Rc<Cell>), : everything is very clear and multiple references to the same cell are permitted, but very low performances. creating a new cons cell you must move
-. Cons()
-. Much more
-. approfondire differenza fra box e referenza
+Lisp interpreter for the version 1.5 of the language described in [Lisp 1.5 Programmer's manual](http://www.softwarepreservation.org/projects/LISP/book/LISP%201.5%20Programmers%20Manual.pdf). This is a revisited full-functional Lisp implementation: this means that when a cell is used in a procedure it is cloned, and that the every times `Nil` appears a new instance of the cell is created. Functions are _first class objects_ and values are _immutable_.
+The true peculiarity of this Lisp implementation is that has an *implicit garbage collector* produced by Rust's system for managing the memory.
 
-cose discutibili di rust
-. non mi e piaciuto il sistema di testing
-. mi e piaciuto che il sistema di building e il linguaggio siano una cosa unica, con repo di packages annesse. La filosofia e che sia difficile comunque scrivere in rust: usa cose gia scritte e testate come hai fatto il parser. esiste anche un parser completamente specializzato per list che contiene gia anche i tipi, ma io volevo usare una mia implementazione. questo mi ha permesso tipo di evitare quei brutti errori fatali che ho incontrato nel parser ad un certo punto del progetto, nascosti in poche righe di codice C
-. il supporto builtin ad un sacco di cose
-. cosa non piaciuta: i test dentro il codice (cita clean code)
-. supporto ai colori in liena con la filosofia, perche e multipiattaforma (invece quello del C di mettere dei caratteri e un po rozzo)
-. la differenza per fare un car o un cdr imopressionante fra rust e c
-. errori se tutto il match non coperto
-. invece di un milione di flag per l ottimizzazione passate alc ompilatore, basta usare cargo e la sua modalita per fare cose cool
+The built-in Lisp constructs (for now) supported are: 
+* `CAR`
+* `CDR`
+* `CONS`
+* `LAMBDA`
+* `QUOTE`
+* `COND`
+* `ATOM`
+* `EQ`
+* `T`
+* `LABEL`
+* `+`
