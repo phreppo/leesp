@@ -27,7 +27,6 @@ pub enum Cell {
     Num(i32),
     Str(String),
     Symbol(String),
-    // qui prima avevo un RC
     Cons(Rc<Cell>, Rc<Cell>),
 }
 
@@ -134,7 +133,6 @@ pub fn eq(cell1: &Cell, cell2: &Cell) -> Cell {
     }
 }
 
-// TODO: test this!
 pub fn caddr(cell: &Cell) -> Option<Rc<Cell>> {
     match maybe_cdr(Some(cell)) {
         Some(rc_to_cons_cell) => cadr(&rc_to_cons_cell),
@@ -142,7 +140,6 @@ pub fn caddr(cell: &Cell) -> Option<Rc<Cell>> {
     }
 }
 
-// first checks if the cell is a symbol, and then if the symbol is the one on the right
 pub fn is_symbol(cell: &Cell, symbol: Symbol) -> bool {
     match cell {
         Cell::Symbol(symbol_string) => match symbol {

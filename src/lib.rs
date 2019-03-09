@@ -4,12 +4,12 @@ extern crate lalrpop_util;
 lalrpop_mod!(_parser); // synthesized by LALRPOP
 
 pub mod language;
-pub mod lispcore;
+pub mod evaluator;
 pub mod parser;
 
 #[cfg(test)]
 mod tests {
-    use lispcore::*;
+    use evaluator::*;
     use language::*;
     use std::rc::Rc;
 
@@ -38,12 +38,11 @@ mod tests {
     }
 
     fn env1() -> Cell {
-        return new_cons(Rc::new(assoc1()), Rc::new(new_cons(Rc::new(assoc2()), Rc::new(new_nil()))));
-    }
-
-    #[test]
-    fn it_works() {
-        assert_eq!(2 + 2, 4);
+        return new_cons(
+            Rc::new(assoc1()), 
+            Rc::new(new_cons(
+                Rc::new(assoc2()), 
+                Rc::new(new_nil()))));
     }
 
     #[test]
