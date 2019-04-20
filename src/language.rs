@@ -28,7 +28,7 @@ pub enum Cell {
     Str(String),
     Symbol(String),
     Cons(Rc<Cell>, Rc<Cell>),
-}
+} 
 
 impl Display for Cell {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
