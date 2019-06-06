@@ -1,4 +1,4 @@
-#[macro_use]
+#[macro_use] 
 extern crate lalrpop_util;
 
 lalrpop_mod!(_parser); // synthesized by LALRPOP
